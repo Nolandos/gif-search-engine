@@ -1,0 +1,11 @@
+.gif-container {
+    min-height: 350px;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+
+    .gif {
+        min-height: 400px;
+    }
+}
