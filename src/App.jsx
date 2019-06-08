@@ -30,19 +30,19 @@ class App extends React.Component {
 
   getGif = (searchingText, callback) => {
     let GIPHY_API_URL = 'https://api.giphy.com';
-    let GIPHY_PUB_KEY = 'NDVCXsQq3i3riMhaO5kaYLmC9LDpnWd1';
+    let GIPHY_PUB_KEY = 'oQEZzRq7sYEyS909tFCCgO4r8fSc237q';
 
-    var url = GIPHY_API_URL + '/v1/gifs/random?api_key=' + GIPHY_PUB_KEY + '&tag=' + searchingText;  // 2.
-      var xhr = new XMLHttpRequest();  // 3.
+    let url = GIPHY_API_URL + '/v1/gifs/random?api_key=' + GIPHY_PUB_KEY + '&tag=' + searchingText;  
+      let xhr = new XMLHttpRequest();  
       xhr.open('GET', url);
       xhr.onload = function() {
           if (xhr.status === 200) {
-            var data = JSON.parse(xhr.responseText).data; // 4.
-              var gif = {  // 5.
+            let data = JSON.parse(xhr.responseText).data; 
+              let gif = {  
                 url: data.fixed_width_downsampled_url,
                 sourceUrl: data.url
               };
-              callback(gif);  // 6.
+              callback(gif);  
           }
       };
     xhr.send();
