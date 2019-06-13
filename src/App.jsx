@@ -19,34 +19,48 @@ class App extends React.Component {
       loading: true  
     });
 
-    this.getGif(searchingText, function(gif) { 
-      this.setState({ 
-        loading: false, 
-        gif: gif,  
-        searchingText: searchingText 
-      });
-    }.bind(this));
+    this.getGif(searchingText)
+    .then( gif => {
+    	this.setState({ 
+        	loading: false, 
+        	gif: gif,  
+        	searchingText: searchingText 
+      	});
+    })
+    .catch(error => console.log(error))
   }
 
-  getGif = (searchingText, callback) => {
-    let GIPHY_API_URL = 'https://api.giphy.com';
+ 	getGif(searchingText) {
+  	let GIPHY_API_URL = 'https://api.giphy.com';
     let GIPHY_PUB_KEY = 'oQEZzRq7sYEyS909tFCCgO4r8fSc237q';
 
-    let url = GIPHY_API_URL + '/v1/gifs/random?api_key=' + GIPHY_PUB_KEY + '&tag=' + searchingText;  
-      let xhr = new XMLHttpRequest();  
-      xhr.open('GET', url);
-      xhr.onload = function() {
-          if (xhr.status === 200) {
-            let data = JSON.parse(xhr.responseText).data; 
-              let gif = {  
-                url: data.fixed_width_downsampled_url,
-                sourceUrl: data.url
-              };
-              callback(gif);  
-          }
-      };
-    xhr.send();
-  }
+    let url = GIPHY_API_URL + '/v1/gifs/random?api_key=' + GIPHY_PUB_KEY + '&tag=' + searchingText;
+    return new Promise(
+        function(resolve, reject) {
+            let xhr = new XMLHttpRequest();  
+      		xhr.open('GET', url);
+
+            xhr.onload = function() {
+                if (this.status === 200) {
+                	let data = JSON.parse(xhr.responseText).data; 
+              		let gif = {  
+                		url: data.fixed_width_downsampled_url,
+                		sourceUrl: data.url
+              		};
+                    resolve(gif); 
+                } else {
+                    reject(new Error(this.statusText)); 
+                }
+            };
+            xhr.onerror = function() {
+                reject(new Error(
+                   `XMLHttpRequest Error: ${this.statusText}`));
+            };
+           
+            xhr.send();
+        });
+}
+
   
   render() {
     return (
